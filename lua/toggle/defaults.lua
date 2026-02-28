@@ -4,6 +4,7 @@ return {
     { '(', ')' },
     { '{', '}' },
     { '-', '+' },
+    { '*', '/' },
     { '<', '>' },
     { "'", '"' },
     { '&&', '||' },
@@ -32,6 +33,8 @@ return {
     { 'lock', 'unlock' },
     { 'load', 'unload' },
     { 'allow', 'deny' },
+    { 'TODO', 'DONE' },
+    { 'todo', 'done' },
     { 'first', 'last' },
     { 'inner', 'outer' },
     { 'true', 'false' },
@@ -74,3 +77,4 @@ return {
     { 'public', 'protected', 'private' },
     { 'left', 'center', 'right' },
 }
+
