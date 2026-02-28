@@ -11,18 +11,17 @@ M.__get_mapping = function(word)
 end
 
 M.__register = function(list)
-  for i, value in ipairs(list) do
-    if i == #list then
-      mapping[value] = list[1]
-    else
-      mapping[value] = list[i + 1]
+    for i, value in ipairs(list) do
+        if i == #list then
+            mapping[value] = list[1]
+        else
+            mapping[value] = list[i + 1]
+        end
     end
-  end
 end
 
 M.__has_mapping = function(word)
-  return mapping[word] ~= nil
+    return mapping[word] ~= nil
 end
 
 return M
-
