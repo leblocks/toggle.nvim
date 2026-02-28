@@ -51,27 +51,5 @@ Mappings are circular: for a group like `{ 'public', 'protected', 'private' }`, 
 
 ## Default mappings
 
-| Toggle group                              |
-|-------------------------------------------|
-| `[` ↔ `]`                                |
-| `(` ↔ `)`                                |
-| `{` ↔ `}`                                |
-| `-` ↔ `+`                                |
-| `<` ↔ `>`                                |
-| `'` ↔ `"`                                |
-| `&&` ↔ `\|\|`                            |
-| `or` ↔ `and`                             |
-| `get` ↔ `set`                            |
-| `on` ↔ `off`                             |
-| `all` ↔ `none`                           |
-| `allow` ↔ `deny`                         |
-| `true` ↔ `false`                         |
-| `$True` ↔ `$False`                       |
-| `enable` ↔ `disable`                     |
-| `Enable` ↔ `Disable`                     |
-| `enabled` ↔ `disabled`                   |
-| `Enabled` ↔ `Disabled`                   |
-| `public` → `protected` → `private`       |
-| `IsTrue` ↔ `IsFalse`                     |
-| `IsNull` ↔ `IsNotNull`                   |
+See [lua/toggle/defaults.lua](lua/toggle/defaults.lua) for the full list of built-in toggle pairs.
 

@@ -106,32 +106,9 @@ toggle.toggle()
 ==============================================================================
 6. DEFAULT MAPPINGS                                       *toggle-defaults*
 
-The following toggle pairs are included by default:
+The full list of built-in toggle pairs can be found in the source file:
 
-  Pair toggles:
-    `[` ↔ `]`
-    `(` ↔ `)`
-    `{` ↔ `}`
-    `-` ↔ `+`
-    `<` ↔ `>`
-    `'` ↔ `"`
-    `&&` ↔ `||`
-    `or` ↔ `and`
-    `get` ↔ `set`
-    `on` ↔ `off`
-    `all` ↔ `none`
-    `allow` ↔ `deny`
-    `true` ↔ `false`
-    `$True` ↔ `$False`
-    `enable` ↔ `disable`
-    `Enable` ↔ `Disable`
-    `enabled` ↔ `disabled`
-    `Enabled` ↔ `Disabled`
-    `IsTrue` ↔ `IsFalse`
-    `IsNull` ↔ `IsNotNull`
-
-  Cycle toggles:
-    `public` → `protected` → `private` → `public`
+  `lua/toggle/defaults.lua`
 
 ==============================================================================
  vim:tw=78:ts=8:ft=help:norl:
