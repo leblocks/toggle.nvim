@@ -10,6 +10,7 @@ A Neovim plugin to toggle words under the cursor to their counterpart (e.g., `tr
 
 ```lua
 use({ 'leblocks/toggle.nvim', })
+```
 
 ## Configuration
 
