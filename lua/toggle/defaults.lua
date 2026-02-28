@@ -77,4 +77,3 @@ return {
     { 'public', 'protected', 'private' },
     { 'left', 'center', 'right' },
 }
-
