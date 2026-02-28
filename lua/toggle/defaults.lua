@@ -21,3 +21,4 @@ return {
   { 'IsTrue', 'IsFalse' },
   { 'IsNull', 'IsNotNull' },
 }
+

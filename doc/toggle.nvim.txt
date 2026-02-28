@@ -1,0 +1,137 @@
+*toggle.nvim.txt*    Toggle words under the cursor to their counterpart
+
+Author:  sagurevich
+License: GNU GENERAL PUBLIC LICENSE
+
+==============================================================================
+CONTENTS                                                    *toggle-contents*
+
+  1. Introduction .............. |toggle-introduction|
+  2. Setup ..................... |toggle-setup|
+  3. Configuration ............. |toggle-configuration|
+  4. Usage ..................... |toggle-usage|
+  5. Functions ................. |toggle-functions|
+  6. Default mappings .......... |toggle-defaults|
+
+==============================================================================
+1. INTRODUCTION                                         *toggle-introduction*
+
+toggle.nvim is a Neovim plugin that toggles words and characters under the
+cursor to their counterpart. For example, `true` becomes `false`, `public`
+cycles to `protected` then `private`, and bracket pairs swap direction.
+
+Mappings are circular: for a group like `{ "public", "protected", "private" }`,
+each value cycles to the next, and the last wraps back to the first.
+
+==============================================================================
+2. SETUP                                                      *toggle-setup*
+
+toggle.nvim works out of the box with sensible defaults. You can optionally
+call the setup function to customize behavior: >lua
+
+  require('toggle').setup({
+    defaults = true,
+    mappings = {
+      { 'yes', 'no' },
+      { 'foo', 'bar', 'baz' },
+    },
+  })
+<
+Calling `setup()` is optional. The plugin loads default toggle pairs
+automatically.
+
+==============================================================================
+3. CONFIGURATION                                      *toggle-configuration*
+
+                                                         *toggle-setup-opts*
+
+The `setup()` function accepts a table with the following options:
+
+                                                     *toggle-opts-defaults*
+defaults ~
+    Type: `boolean`
+    Default: `true`
+
+    When `true`, built-in toggle pairs are loaded (see |toggle-defaults|).
+    Set to `false` to start with an empty mapping table and only use your
+    own custom chains.
+
+                                                     *toggle-opts-mappings*
+mappings ~
+    Type: `table` (list of lists)
+    Default: `{}`
+
+    Additional toggle pairs to register. Each entry is a list of strings
+    that form a circular toggle group. >lua
+
+      mappings = {
+        { 'yes', 'no' },              -- two-way toggle
+        { 'small', 'medium', 'large' }, -- three-way cycle
+        { 'one', 'two', 'three', 'four', 'five' }, -- and so on
+      }
+<
+
+==============================================================================
+4. USAGE                                                      *toggle-usage*
+
+Place your cursor on a word and call the toggle function.
+
+The plugin performs two checks:
+
+  1. It reads the word under the cursor (|<cword>|). If a mapping exists,
+     it replaces the word using `ciw`.
+  2. If no word mapping is found, it reads the single character under the
+     cursor. If a mapping exists, it replaces the character using `r`.
+
+Example keymap: >lua
+
+  vim.keymap.set('n', '<leader>t', require('toggle').toggle, {
+    desc = 'Toggle word under cursor',
+  })
+<
+
+==============================================================================
+5. FUNCTIONS                                              *toggle-functions*
+
+                                                          *toggle.setup()*
+toggle.setup({opts})
+    Configure the plugin. See |toggle-configuration| for available options.
+    Can be called multiple times to reconfigure mappings.
+
+                                                         *toggle.toggle()*
+toggle.toggle()
+    Toggle the word or character under the cursor. See |toggle-usage| for
+    details on the matching behavior.
+
+==============================================================================
+6. DEFAULT MAPPINGS                                       *toggle-defaults*
+
+The following toggle pairs are included by default:
+
+  Pair toggles:
+    `[` ↔ `]`
+    `(` ↔ `)`
+    `{` ↔ `}`
+    `-` ↔ `+`
+    `<` ↔ `>`
+    `'` ↔ `"`
+    `&&` ↔ `||`
+    `or` ↔ `and`
+    `get` ↔ `set`
+    `on` ↔ `off`
+    `all` ↔ `none`
+    `allow` ↔ `deny`
+    `true` ↔ `false`
+    `$True` ↔ `$False`
+    `enable` ↔ `disable`
+    `Enable` ↔ `Disable`
+    `enabled` ↔ `disabled`
+    `Enabled` ↔ `Disabled`
+    `IsTrue` ↔ `IsFalse`
+    `IsNull` ↔ `IsNotNull`
+
+  Cycle toggles:
+    `public` → `protected` → `private` → `public`
+
+==============================================================================
+ vim:tw=78:ts=8:ft=help:norl:
