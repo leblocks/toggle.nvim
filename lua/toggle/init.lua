@@ -27,10 +27,16 @@ function M.setup(opts)
 end
 
 function M.toggle()
-    local word_under_cursor = vim.fn.expand('<cWORD>')
+    local cWORD_under_cursor = vim.fn.expand('<cWORD>')
+    local cword_under_cursor = vim.fn.expand('<cword>')
 
-    if mapping.__has_mapping(word_under_cursor) then
-        vim.api.nvim_command('normal! ciW' .. mapping.__get_mapping(word_under_cursor))
+    if mapping.__has_mapping(cWORD_under_cursor) then
+        vim.api.nvim_command('normal! ciW' .. mapping.__get_mapping(cWORD_under_cursor))
+        return
+    end
+
+    if mapping.__has_mapping(cword_under_cursor) then
+        vim.api.nvim_command('normal! ciw' .. mapping.__get_mapping(cword_under_cursor))
         return
     end
 
