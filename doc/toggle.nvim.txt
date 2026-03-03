@@ -31,6 +31,7 @@ call the setup function to customize behavior: >lua
 
   require('toggle').setup({
     defaults = true,
+    keep_cursor_position = true,
     mappings = {
       { 'yes', 'no' },
       { 'foo', 'bar', 'baz' },
@@ -55,6 +56,14 @@ defaults ~
     When `true`, built-in toggle pairs are loaded (see |toggle-defaults|).
     Set to `false` to start with an empty mapping table and only use your
     own custom chains.
+
+                                                *toggle-opts-keep-cursor-pos*
+keep_cursor_position ~
+    Type: `boolean`
+    Default: `true`
+
+    When `true`, the cursor position is restored after toggling a word.
+    Set to `false` to leave the cursor at the end of the replaced word.
 
                                                      *toggle-opts-mappings*
 mappings ~

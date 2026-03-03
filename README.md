@@ -19,6 +19,9 @@ require('toggle').setup({
   -- Include built-in toggle pairs (default: true)
   defaults = true,
 
+  -- Restore cursor position after toggling a word (default: true)
+  keep_cursor_position = true,
+
   -- Additional toggle pairs (merged with defaults)
   mappings = {
     { 'yes', 'no' },
@@ -32,6 +35,7 @@ require('toggle').setup({
 | Option     | Type    | Default | Description                          |
 |------------|---------|---------|--------------------------------------|
 | `defaults` | boolean | `true`  | Include built-in toggle pairs        |
+| `keep_cursor_position` | boolean | `true` | Restore cursor position after toggling a word |
 | `mappings` | table   | `{}`    | Additional toggle pairs to register  |
 
 ## Usage
