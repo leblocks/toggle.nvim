@@ -35,7 +35,7 @@ return {
     { 'allow', 'deny' },
     { 'TODO', 'DONE' },
     { 'todo', 'done' },
-    { 'last', 'last' },
+    { 'first', 'last' },
     { 'inner', 'outer' },
     { 'true', 'false' },
     { 'TRUE', 'FALSE' },
