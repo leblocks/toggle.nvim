@@ -1,5 +1,6 @@
 local mapping = require('toggle.mapping')
 local defaults = require('toggle.defaults')
+local replacer = require('toggle.replacer')
 
 local M = {}
 
@@ -35,34 +36,22 @@ function M.setup(opts)
 end
 
 function M.toggle()
-    local cWORD_under_cursor = vim.fn.expand('<cWORD>')
-    local cword_under_cursor = vim.fn.expand('<cword>')
+    local replacers = {
+        replacer.__cWORD_replacer(),
+        replacer.__cword_replacer(),
+        replacer.__character_replacer(),
+    }
+
     local current_cursor_position = vim.fn.getcurpos()
 
-    if mapping.__has_mapping(cWORD_under_cursor) then
-        vim.api.nvim_command('normal! ciW' .. mapping.__get_mapping(cWORD_under_cursor))
-        if config.keep_cursor_position then
-            vim.fn.setpos('.', current_cursor_position)
+    for _, r in ipairs(replacers) do
+        if r.can_handle() then
+            r.replace()
+            if config.keep_cursor_position then
+                vim.fn.setpos('.', current_cursor_position)
+            end
+            return
         end
-        return
-    end
-
-    if mapping.__has_mapping(cword_under_cursor) then
-        vim.api.nvim_command('normal! ciw' .. mapping.__get_mapping(cword_under_cursor))
-        if config.keep_cursor_position then
-            vim.fn.setpos('.', current_cursor_position)
-        end
-        return
-    end
-
-    -- fall back to single character under cursor
-    local coords = vim.api.nvim_win_get_cursor(0)
-    local line = vim.api.nvim_get_current_line()
-    local character_under_cursor = line:sub(coords[2] + 1, coords[2] + 1)
-
-    if mapping.__has_mapping(character_under_cursor) then
-        vim.api.nvim_command('normal! r' .. mapping.__get_mapping(character_under_cursor))
-        return
     end
 end
 
