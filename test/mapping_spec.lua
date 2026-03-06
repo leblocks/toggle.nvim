@@ -9,23 +9,39 @@ describe('mapping', function()
     end)
 
     it('__get_mapping - existing mapping', function()
-        -- TODO
+        mapping.__reset()
+        mapping.__register({ 'foo', 'bar' })
+        assert(mapping.__get_mapping('foo') == 'bar')
+        assert(mapping.__get_mapping('bar') == 'foo')
+    end)
+
+    it('__get_mapping - chain of mappings', function()
+        mapping.__reset()
+        mapping.__register({ 'foo', 'bar', 'zoo' })
+        assert(mapping.__get_mapping('foo') == 'bar')
+        assert(mapping.__get_mapping('bar') == 'zoo')
+        assert(mapping.__get_mapping('zoo') == 'foo')
     end)
 
     it('__get_mapping - non-existing mapping', function()
-        -- TODO
+        mapping.__reset()
+        assert(mapping.__get_mapping('non-existing') == nil)
     end)
 
     it('__register - empty', function()
-        -- TODO
+        mapping.__register({})
     end)
 
     it('__register - null', function()
-        -- TODO
+        mapping.__register(nil)
     end)
 
     it('__register - happy path', function()
-        -- TODO
+        mapping.__reset()
+        mapping.__register({ 'foo', 'bar', 'zoo' })
+        assert(mapping.__has_mapping('foo'))
+        assert(mapping.__has_mapping('bar'))
+        assert(mapping.__has_mapping('zoo'))
     end)
 
     it('__has_mapping - existing map', function()

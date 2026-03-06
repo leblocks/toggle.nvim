@@ -11,7 +11,7 @@ M.__get_mapping = function(word)
 end
 
 M.__register = function(list)
-    for i, value in ipairs(list) do
+    for i, value in ipairs(list or {}) do
         if i == #list then
             mapping[value] = list[1]
         else
