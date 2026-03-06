@@ -1,4 +1,3 @@
-
 local defaults = require('toggle.defaults')
 
 describe('defaults', function()

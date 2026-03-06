@@ -55,4 +55,3 @@ describe('mapping', function()
         assert(mapping.__has_mapping(nil) == false)
     end)
 end)
-
