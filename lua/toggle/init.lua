@@ -37,14 +37,16 @@ end
 
 function M.toggle()
     local replacers = {
-        replacer.__cWORD_replacer(),
-        replacer.__cword_replacer(),
-        replacer.__character_replacer(),
+        replacer.__get_cWORD_replacer,
+        replacer.__get_cword_replacer,
+        replacer.__get_end_of_word_replacer,
+        replacer.__character_replacer,
     }
 
     local current_cursor_position = vim.fn.getcurpos()
 
-    for _, r in ipairs(replacers) do
+    for _, get_replacer in ipairs(replacers) do
+        local r = get_replacer()
         if r.can_handle() then
             r.replace()
             if config.keep_cursor_position then
