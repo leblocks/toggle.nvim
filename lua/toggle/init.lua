@@ -37,10 +37,11 @@ end
 
 function M.toggle()
     local replacers = {
+        replacer.__visual_mode_replacer,
         replacer.__get_cWORD_replacer,
         replacer.__get_cword_replacer,
         replacer.__get_end_of_word_replacer,
-        replacer.__character_replacer,
+        replacer.__get_character_replacer,
     }
 
     local current_cursor_position = vim.fn.getcurpos()
