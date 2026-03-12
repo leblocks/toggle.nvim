@@ -67,10 +67,13 @@ M.__get_end_of_word_replacer = function()
 end
 
 M.__visual_mode_replacer = function()
+    local function is_visual_mode()
+        local mode = vim.api.nvim_get_mode().mode
+        return (mode == 'v') or (mode == 'V')
+    end
 
-    local mode = vim.api.nvim_get_mode().mode
     local selected_text = ''
-    if mode == 'v' or mode == 'V' then
+    if is_visual_mode() then
         local vstart = vim.fn.getpos(".")
         local vend = vim.fn.getpos("v")
         local lines = vim.fn.getregion(vstart, vend)
@@ -79,7 +82,7 @@ M.__visual_mode_replacer = function()
 
     return {
         can_handle = function()
-            return (mode == 'v' or mode == 'V') and mapping.__has_mapping(selected_text)
+            return is_visual_mode() and mapping.__has_mapping(selected_text)
         end,
 
         replace = function()
