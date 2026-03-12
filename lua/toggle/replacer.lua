@@ -74,8 +74,8 @@ M.__visual_mode_replacer = function()
 
     local selected_text = ''
     if is_visual_mode() then
-        local vstart = vim.fn.getpos(".")
-        local vend = vim.fn.getpos("v")
+        local vstart = vim.fn.getpos('.')
+        local vend = vim.fn.getpos('v')
         local lines = vim.fn.getregion(vstart, vend)
         selected_text = lines[1]
     end
