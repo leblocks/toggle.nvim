@@ -43,13 +43,16 @@ require('toggle').setup({
 ### Keymap example
 
 ```lua
-vim.keymap.set('n', '<leader>t', require('toggle').toggle, { desc = 'Toggle word' })
+-- v for visual mode, if needed
+vim.keymap.set({ 'n', 'v' }, '<leader>t', require('toggle').toggle, { desc = 'Toggle word' })
 ```
 
 ## How it works
 
-1. Gets the **word** under the cursor and checks for a mapping → replaces with `ciw`
+1. Gets the **word** under the cursor and checks for a mapping → replaces with `ciw` / `ciW`
 2. Falls back to the single **character** under the cursor → replaces with `r`
+3. Also works for visual mode, in such case selection is being checked
+4. Also checks if end of word matches anything in mappings and toggles it
 
 Mappings are circular: for a group like `{ 'public', 'protected', 'private' }`, each value cycles to the next, and the last wraps to the first.
 

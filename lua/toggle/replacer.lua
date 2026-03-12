@@ -66,4 +66,29 @@ M.__get_end_of_word_replacer = function()
     }
 end
 
+M.__visual_mode_replacer = function()
+    local function is_visual_mode()
+        local mode = vim.api.nvim_get_mode().mode
+        return (mode == 'v') or (mode == 'V')
+    end
+
+    local selected_text = ''
+    if is_visual_mode() then
+        local vstart = vim.fn.getpos('.')
+        local vend = vim.fn.getpos('v')
+        local lines = vim.fn.getregion(vstart, vend)
+        selected_text = lines[1]
+    end
+
+    return {
+        can_handle = function()
+            return is_visual_mode() and mapping.__has_mapping(selected_text)
+        end,
+
+        replace = function()
+            vim.api.nvim_command('norm! c' .. mapping.__get_mapping(selected_text))
+        end,
+    }
+end
+
 return M

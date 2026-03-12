@@ -11,6 +11,7 @@ return {
     -- short words
     { 'or', 'and' },
     { 'on', 'off' },
+    { 'in', 'out' },
     { 'up', 'down' },
     { 'get', 'set' },
     { 'yes', 'no' },
