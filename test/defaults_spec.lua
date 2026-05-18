@@ -6,6 +6,7 @@ describe('defaults', function()
         for _, mapping in ipairs(defaults) do
             for _, word in ipairs(mapping) do
                 if seen[word] then
+                    print('has duplicate mapping for ' .. word)
                     assert(false)
                 else
                     seen[word] = true
