@@ -2,7 +2,7 @@
 
 A Neovim plugin to toggle words under the cursor to their counterpart (e.g., `true` → `false`, `public` → `protected` → `private`).
 
-[![bvT1Q.gif](https://s13.gifyu.com/images/bv5lv.gif)](https://s13.gifyu.com/images/bv5lv.gif)
+[![bmEeX.gif](https://s13.gifyu.com/images/bmEeX.gif)](https://gifyu.com/image/bmEeX)
 
 ## Installation
 
