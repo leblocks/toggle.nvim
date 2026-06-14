@@ -43,20 +43,28 @@ require('toggle').setup({
 ### Keymap example
 
 ```lua
--- v for visual mode, if needed
 vim.keymap.set({ 'n', 'v' }, '<leader>t', require('toggle').toggle, { desc = 'Toggle word' })
+vim.keymap.set({ 'n', 'v' }, '<leader>T', function() require('toggle').toggle(true) end, { desc = 'Toggle word (backward)' })
 ```
 
 ## How it works
 
-1. Gets the **word** under the cursor and checks for a mapping → replaces with `ciw` / `ciW`
-2. Falls back to the single **character** under the cursor → replaces with `r`
-3. Also works for visual mode, in such case selection is being checked
-4. Also checks if end of word matches anything in mappings and toggles it
+`toggle.toggle()` checks replacers in this order (first match wins):
+
+1. Visual selection
+2. `cWORD` (`ciW`)
+3. `cword` (`ciw`)
+4. End-of-word match (`ce`) for cases like `goto_prev` → `goto_next`
+5. Single character (`r`)
+
+Pass `true` to toggle backwards in the mapping cycle:
+
+```lua
+require('toggle').toggle(true)
+```
 
 Mappings are circular: for a group like `{ 'public', 'protected', 'private' }`, each value cycles to the next, and the last wraps to the first.
 
 ## Default mappings
 
 See [lua/toggle/defaults.lua](lua/toggle/defaults.lua) for the full list of built-in toggle pairs.
-
