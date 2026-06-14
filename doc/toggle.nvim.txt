@@ -83,20 +83,28 @@ mappings ~
 ==============================================================================
 4. USAGE                                                      *toggle-usage*
 
-Place your cursor on a word and call the toggle function.
+Place your cursor on text and call the toggle function.
 
-The plugin performs two checks:
+The plugin checks replacers in this order (first match wins):
 
-  1. It reads the word under the cursor (|<cword>|). If a mapping exists,
-     it replaces the word using `ciw`.
-  2. If no word mapping is found, it reads the single character under the
-     cursor. If a mapping exists, it replaces the character using `r`.
+  1. Visual selection (`c` in visual mode)
+  2. WORD under cursor (|<cWORD>|), replaced with `ciW`
+  3. Word under cursor (|<cword>|), replaced with `ciw`
+  4. End-of-word suffix under cursor, replaced with `ce`
+  5. Single character under cursor, replaced with `r`
 
 Example keymap: >lua
 
-  vim.keymap.set('n', '<leader>t', require('toggle').toggle, {
+  vim.keymap.set({ 'n', 'v' }, '<leader>t', require('toggle').toggle, {
     desc = 'Toggle word under cursor',
   })
+<
+
+Backward toggle example: >lua
+
+  vim.keymap.set({ 'n', 'v' }, '<leader>T', function()
+    require('toggle').toggle(true)
+  end, { desc = 'Toggle word backward' })
 <
 
 ==============================================================================
@@ -108,9 +116,14 @@ toggle.setup({opts})
     Can be called multiple times to reconfigure mappings.
 
                                                          *toggle.toggle()*
-toggle.toggle()
+toggle.toggle([{toggle_backwards}])
     Toggle the word or character under the cursor. See |toggle-usage| for
     details on the matching behavior.
+
+    Parameters: ~
+      {toggle_backwards}  (`boolean`, optional)
+          When `true`, cycles mappings backward (previous value in a circular
+          group) instead of forward.
 
 ==============================================================================
 6. DEFAULT MAPPINGS                                       *toggle-defaults*

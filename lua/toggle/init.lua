@@ -35,7 +35,7 @@ function M.setup(opts)
     end
 end
 
-function M.toggle()
+function M.toggle(toggle_backwards)
     local replacers = {
         replacer.__visual_mode_replacer,
         replacer.__get_cWORD_replacer,
@@ -44,12 +44,18 @@ function M.toggle()
         replacer.__get_character_replacer,
     }
 
+    local mapper = mapping.__get_mapping
+
+    if toggle_backwards then
+        mapper = mapping.__get_previous_mapping
+    end
+
     local current_cursor_position = vim.fn.getcurpos()
 
     for _, get_replacer in ipairs(replacers) do
         local r = get_replacer()
         if r.can_handle() then
-            r.replace()
+            r.replace(mapper)
             if config.keep_cursor_position then
                 vim.fn.setpos('.', current_cursor_position)
             end

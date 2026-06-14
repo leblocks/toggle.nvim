@@ -1,0 +1,6 @@
+false
+false,
+<
+goto_prev
+thisisalongwordwithprotectedanotherwordinside
+kaboomza

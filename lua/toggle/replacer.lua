@@ -10,8 +10,8 @@ M.__get_cword_replacer = function()
             return mapping.__has_mapping(word)
         end,
 
-        replace = function()
-            vim.api.nvim_command('normal! ciw' .. mapping.__get_mapping(word))
+        replace = function(get_mapping)
+            vim.api.nvim_command('normal! ciw' .. get_mapping(word))
         end,
     }
 end
@@ -23,8 +23,8 @@ M.__get_cWORD_replacer = function()
             return mapping.__has_mapping(word)
         end,
 
-        replace = function()
-            vim.api.nvim_command('normal! ciW' .. mapping.__get_mapping(word))
+        replace = function(get_mapping)
+            vim.api.nvim_command('normal! ciW' .. get_mapping(word))
         end,
     }
 end
@@ -39,8 +39,8 @@ M.__get_character_replacer = function()
             return mapping.__has_mapping(character)
         end,
 
-        replace = function()
-            vim.api.nvim_command('normal! r' .. mapping.__get_mapping(character))
+        replace = function(get_mapping)
+            vim.api.nvim_command('normal! r' .. get_mapping(character))
         end,
     }
 end
@@ -60,8 +60,8 @@ M.__get_end_of_word_replacer = function()
             return mapping.__has_mapping(end_of_word_under_cursor)
         end,
 
-        replace = function()
-            vim.api.nvim_command('normal! ce' .. mapping.__get_mapping(end_of_word_under_cursor))
+        replace = function(get_mapping)
+            vim.api.nvim_command('normal! ce' .. get_mapping(end_of_word_under_cursor))
         end,
     }
 end
@@ -85,8 +85,8 @@ M.__visual_mode_replacer = function()
             return is_visual_mode() and mapping.__has_mapping(selected_text)
         end,
 
-        replace = function()
-            vim.api.nvim_command('norm! c' .. mapping.__get_mapping(selected_text))
+        replace = function(get_mapping)
+            vim.api.nvim_command('norm! c' .. get_mapping(selected_text))
         end,
     }
 end
