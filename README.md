@@ -1,67 +1,116 @@
-# toggle.nvim
+# 🔄 toggle.nvim
 
-A Neovim plugin to toggle words under the cursor to their counterpart (e.g., `true` → `false`, `public` → `protected` → `private`).
+[![CI](https://img.shields.io/github/actions/workflow/status/leblocks/toggle.nvim/ci.yml?branch=master&label=CI&style=flat-square)](https://github.com/leblocks/toggle.nvim/actions)
+
+Instantly toggle words under your cursor to their semantic counterparts in a seamless, circular cycle. 
+
+Whether you're swapping `true` to `false`, cycling through `public` → `protected` → `private`, or switching operators like `==` to `!=`, **toggle.nvim** handles it smartly, predictably, and without losing your cursor position.
+
+## ✨ Features
+
+- **Multi-Step Circular Cycling:** Go beyond simple booleans. Cycle through 3+ state chains (e.g., `info` → `warn` → `error` → `fatal`).
+- **Bi-directional:** Toggle forwards or backwards seamlessly.
+- **Smart Matching Engine:** Intelligently evaluates the word under the cursor. Supports Visual selections, `cWORD`, `cword`, end-of-word (`ce`), and single-character matches.
+- **Cursor Preservation:** Your cursor stays exactly where it belongs, maintaining its relative position during replacements.
+- **Zero Dependencies:** Extremely lightweight and fast.
+- **Highly Extensible:** Ship with sensible built-in defaults, but easily merge your own custom pairs.
+
+## 🎥 Demonstration
 
 [![bmEeX.gif](https://s13.gifyu.com/images/bmEeX.gif)](https://gifyu.com/image/bmEeX)
 
-## Installation
+## 📦 Installation
 
-### [packer.nvim](https://github.com/wbthomason/packer.nvim)
+Install `toggle.nvim` with your preferred package manager.
 
+**vim.pack**
 ```lua
-use({ 'leblocks/toggle.nvim', })
+vim.pack.add({ 'https://github.com/leblocks/toggle.nvim' })
 ```
 
-## Configuration
+**[lazy.nvim](https://github.com/folke/lazy.nvim):**
+```lua
+{
+  "leblocks/toggle.nvim",
+  config = true,
+  -- Optional: Define keymaps here via lazy's keys property
+}
+```
+
+**[packer.nvim](https://github.com/wbthomason/packer.nvim):**
+```lua
+use {
+  "leblocks/toggle.nvim",
+  config = function()
+    require("toggle").setup()
+  end
+}
+```
+
+## 🚀 Quick Setup & Keymaps
+
+Call the `setup()` function and map your preferred keys.
 
 ```lua
-require('toggle').setup({
-  -- Include built-in toggle pairs (default: true)
-  defaults = true,
+-- In your init.lua or keymaps.lua
+require("toggle").setup({
+  -- Optional: Override default settings here
+})
 
-  -- Restore cursor position after toggling a word (default: true)
-  keep_cursor_position = true,
+-- Forward toggle
+vim.keymap.set("n", "t", function()
+  require("toggle").toggle()
+end, { desc = "Toggle word (Forward)" })
 
-  -- Additional toggle pairs (merged with defaults)
+-- Backward toggle (pass `true` to reverse direction)
+vim.keymap.set("n", "T", function()
+  require("toggle").toggle(true)
+end, { desc = "Toggle word (Backward)" })
+```
+
+## ⚙️ Configuration Reference
+
+You can pass a configuration table to `setup()`. Here are the available options and their defaults:
+
+| Option | Type | Default | Description |
+| :--- | :---: | :---: | :--- |
+| `defaults` | `boolean` | `true` | If `true`, loads the plugin's built-in default mappings (e.g., true/false, on/off). |
+| `keep_cursor_position`| `boolean` | `true` | Maintains the cursor's relative horizontal position after the replacement. |
+| `mappings` | `table` | `{}` | A list of tables containing your custom cyclic mappings. Merges with defaults. |
+
+## 🛠️ Advanced Usage & Custom Mappings
+
+Adding your own custom vocabulary is trivial. Just provide arrays of strings in the `mappings` table. The plugin automatically wires them up as circular chains.
+
+```lua
+require("toggle").setup({
+  defaults = true, -- Keep the built-in mappings
   mappings = {
-    { 'yes', 'no' },
-    { 'foo', 'bar', 'baz' },  -- cycles: foo → bar → baz → foo
-  },
+    -- Custom boolean variants
+    { "yes", "no", "maybe" },
+    { "Yes", "No", "Maybe" },
+    
+    -- Logging levels
+    { "DEBUG", "INFO", "WARN", "ERROR", "FATAL" },
+    
+    -- CSS properties
+    { "flex-start", "center", "flex-end", "space-between", "space-around" },
+    
+    -- Framework specific (e.g., React states)
+    { "useState", "useEffect", "useContext", "useReducer" },
+  }
 })
 ```
 
-### Options
+## 🧠 How It Works (Matching Priority)
 
-| Option     | Type    | Default | Description                          |
-|------------|---------|---------|--------------------------------------|
-| `defaults` | boolean | `true`  | Include built-in toggle pairs        |
-| `keep_cursor_position` | boolean | `true` | Restore cursor position after toggling a word |
-| `mappings` | table   | `{}`    | Additional toggle pairs to register  |
+To ensure the exact text you want is toggled, the matching engine evaluates the text at your cursor in the following fallback order:
 
-## Usage
-
-### Keymap example
-
-```lua
-vim.keymap.set({ 'n', 'v' }, '<leader>t', require('toggle').toggle, { desc = 'Toggle word' })
-vim.keymap.set({ 'n', 'v' }, '<leader>T', function() require('toggle').toggle(true) end, { desc = 'Toggle word (backward)' })
-```
-
-## How it works
-
-`toggle.toggle()` checks replacers in this order (first match wins):
-
-1. Visual selection
-2. `cWORD` (`ciW`)
-3. `cword` (`ciw`)
-4. End-of-word match (`ce`) for cases like `goto_prev` → `goto_next`
-5. Single character (`r`)
-
-Pass `true` to toggle backwards in the mapping cycle:
-
-```lua
-require('toggle').toggle(true)
-```
+1. **Visual Selection:** The explicitly highlighted text (if triggered from Visual mode).
+2. **`cWORD`:** The full continuous string of non-blank characters.
+3. **`cword`:** The standard alphanumeric word under the cursor.
+4. **End-of-word (`ce`):** Catches edge cases when the cursor is at the tail of a word.
+5. **Single Character (`r`):** Falls back to replacing the exact character under the cursor (useful for single-character operators).
 
 Mappings are circular: for a group like `{ 'public', 'protected', 'private' }`, each value cycles to the next, and the last wraps to the first.
 
