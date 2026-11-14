@@ -1,17 +1,36 @@
 local defaults = require('toggle.defaults')
+local lua_defaults = require('toggle.defaults.lua')
+local csharp_defaults = require('toggle.defaults.csharp')
+local ps_defaults = require('toggle.defaults.powershell')
 
-describe('defaults', function()
-    it('no duplicates in mappings', function()
-        local seen = {}
-        for _, mapping in ipairs(defaults) do
-            for _, word in ipairs(mapping) do
-                if seen[word] then
-                    print('has duplicate mapping for ' .. word)
-                    assert(false)
-                else
-                    seen[word] = true
-                end
+local function check_no_duplicates(mappings, label)
+    local seen = {}
+    for _, mapping in ipairs(mappings) do
+        for _, word in ipairs(mapping) do
+            if seen[word] then
+                print('has duplicate mapping in ' .. label .. ' for ' .. word)
+                assert(false)
+            else
+                seen[word] = true
             end
         end
+    end
+end
+
+describe('defaults', function()
+    it('no duplicates in general mappings', function()
+        check_no_duplicates(defaults, 'general')
+    end)
+
+    it('no duplicates in lua mappings', function()
+        check_no_duplicates(lua_defaults, 'lua')
+    end)
+
+    it('no duplicates in csharp mappings', function()
+        check_no_duplicates(csharp_defaults, 'csharp')
+    end)
+
+    it('no duplicates in powershell mappings', function()
+        check_no_duplicates(ps_defaults, 'powershell')
     end)
 end)
