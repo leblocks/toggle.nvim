@@ -1,8 +1,14 @@
 local mapping = require('toggle.mapping')
 
--- AGENT TODO provide luadocs for replacers
+---@class Replacer
+---@field can_handle fun(filetype?: string): boolean Evaluates whether replacer can handle cursor text
+---@field replace fun(get_mapping: fun(word: string, filetype?: string): string, filetype?: string) Replaces text
+
 local M = {}
 
+--- Creates a replacer for the standard alphanumeric word under the cursor (`<cword>`).
+--- Replaces matched text via `ciw`.
+---@return Replacer
 M.__get_cword_replacer = function()
     local word = vim.fn.expand('<cword>')
     return {
@@ -16,6 +22,9 @@ M.__get_cword_replacer = function()
     }
 end
 
+--- Creates a replacer for the contiguous non-blank string under the cursor (`<cWORD>`).
+--- Replaces matched text via `ciW`.
+---@return Replacer
 M.__get_cWORD_replacer = function()
     local word = vim.fn.expand('<cWORD>')
     return {
@@ -29,6 +38,9 @@ M.__get_cWORD_replacer = function()
     }
 end
 
+--- Creates a replacer for the single character under the cursor.
+--- Replaces matched text via `r`.
+---@return Replacer
 M.__get_character_replacer = function()
     local coords = vim.api.nvim_win_get_cursor(0)
     local line = vim.api.nvim_get_current_line()
@@ -45,6 +57,9 @@ M.__get_character_replacer = function()
     }
 end
 
+--- Creates a replacer for the sub-word extending from the cursor to the end of the word.
+--- Replaces matched text via `ce`.
+---@return Replacer
 M.__get_end_of_word_replacer = function()
     local current_cursor_position = vim.fn.getcurpos()
     vim.api.nvim_command('normal! e') -- jump to the end of word
@@ -66,6 +81,9 @@ M.__get_end_of_word_replacer = function()
     }
 end
 
+--- Creates a replacer for the actively selected visual mode region.
+--- Replaces matched text via `c`.
+---@return Replacer
 M.__visual_mode_replacer = function()
     local function is_visual_mode()
         local mode = vim.api.nvim_get_mode().mode
