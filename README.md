@@ -127,4 +127,4 @@ Mappings are circular: for a group like `{ 'public', 'protected', 'private' }`, 
 
 ## Default mappings
 
-See [lua/toggle/defaults/](lua/toggle/defaults/) for the full list of built-in toggle pairs, including general pairs and language-specific sets (Lua, C#, and PowerShell).
+See [lua/toggle/defaults/](lua/toggle/defaults/) for the full list of built-in toggle pairs, including general pairs and language-specific sets (Lua, C#, PowerShell, Python, and JavaScript).

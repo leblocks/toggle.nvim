@@ -148,9 +148,9 @@ toggle.toggle([{toggle_backwards}])
 ==============================================================================
 6. DEFAULT MAPPINGS                                       *toggle-defaults*
 
-The full list of built-in toggle pairs can be found in the source file:
+The full list of built-in toggle pairs can be found in the directory:
 
-  `lua/toggle/defaults.lua`
+  `lua/toggle/defaults/`
 
 ==============================================================================
  vim:tw=78:ts=8:ft=help:norl:

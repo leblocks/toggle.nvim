@@ -2,6 +2,8 @@ local defaults = require('toggle.defaults')
 local lua_defaults = require('toggle.defaults.lua')
 local csharp_defaults = require('toggle.defaults.csharp')
 local ps_defaults = require('toggle.defaults.powershell')
+local python_defaults = require('toggle.defaults.python')
+local js_defaults = require('toggle.defaults.javascript')
 
 local function check_no_duplicates(mappings, label)
     local seen = {}
@@ -32,5 +34,13 @@ describe('defaults', function()
 
     it('no duplicates in powershell mappings', function()
         check_no_duplicates(ps_defaults, 'powershell')
+    end)
+
+    it('no duplicates in python mappings', function()
+        check_no_duplicates(python_defaults, 'python')
+    end)
+
+    it('no duplicates in javascript mappings', function()
+        check_no_duplicates(js_defaults, 'javascript')
     end)
 end)

@@ -36,6 +36,12 @@ function M.setup(opts)
         register_table(require('toggle.defaults.lua'), 'lua')
         register_table(require('toggle.defaults.powershell'), 'ps1')
         register_table(require('toggle.defaults.csharp'), 'cs')
+        register_table(require('toggle.defaults.python'), 'python')
+        local js_defaults = require('toggle.defaults.javascript')
+        register_table(js_defaults, 'javascript')
+        register_table(js_defaults, 'javascriptreact')
+        register_table(js_defaults, 'typescript')
+        register_table(js_defaults, 'typescriptreact')
     end
 
     if opts.mappings then
