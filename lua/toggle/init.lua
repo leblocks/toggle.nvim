@@ -4,6 +4,12 @@ local replacer = require('toggle.replacer')
 
 local M = {}
 
+local register_table = function(mappings, filetype)
+    for _, map in ipairs(mappings) do
+        mapping.__register(map, filetype)
+    end
+end
+
 ---@class ToggleConfiguration
 ---@field defaults boolean Include built-in toggle pairs
 ---@field mappings table Additional toggle pairs
@@ -23,12 +29,15 @@ function M.setup(opts)
     mapping.__reset()
 
     if opts.defaults ~= false then
-        for _, pair in ipairs(defaults) do
-            mapping.__register(pair)
-        end
+        -- load default mapping
+        register_table(defaults)
+        register_table(require('toggle.defaults.lua'), 'lua')
+        register_table(require('toggle.defaults.powershell'), 'ps1')
+        register_table(require('toggle.defaults.csharp'), 'cs')
     end
 
     if opts.mappings then
+        -- TODO support overrides by filetypes
         for _, pair in ipairs(opts.mappings) do
             mapping.__register(pair)
         end
@@ -50,12 +59,13 @@ function M.toggle(toggle_backwards)
         mapper = mapping.__get_previous_mapping
     end
 
+    local current_filetype = vim.bo.filetype
     local current_cursor_position = vim.fn.getcurpos()
 
     for _, get_replacer in ipairs(replacers) do
         local r = get_replacer()
-        if r.can_handle() then
-            r.replace(mapper)
+        if r.can_handle(current_filetype) then
+            r.replace(mapper, current_filetype)
             if config.keep_cursor_position then
                 vim.fn.setpos('.', current_cursor_position)
             end

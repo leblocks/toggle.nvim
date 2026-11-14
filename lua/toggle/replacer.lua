@@ -1,17 +1,17 @@
 local mapping = require('toggle.mapping')
 
--- TODO provide luadocs for replacers
+-- AGENT TODO provide luadocs for replacers
 local M = {}
 
 M.__get_cword_replacer = function()
     local word = vim.fn.expand('<cword>')
     return {
-        can_handle = function()
-            return mapping.__has_mapping(word)
+        can_handle = function(filetype)
+            return mapping.__has_mapping(word, filetype)
         end,
 
-        replace = function(get_mapping)
-            vim.api.nvim_command('normal! ciw' .. get_mapping(word))
+        replace = function(get_mapping, filetype)
+            vim.api.nvim_command('normal! ciw' .. get_mapping(word, filetype))
         end,
     }
 end
@@ -19,12 +19,12 @@ end
 M.__get_cWORD_replacer = function()
     local word = vim.fn.expand('<cWORD>')
     return {
-        can_handle = function()
-            return mapping.__has_mapping(word)
+        can_handle = function(filetype)
+            return mapping.__has_mapping(word, filetype)
         end,
 
-        replace = function(get_mapping)
-            vim.api.nvim_command('normal! ciW' .. get_mapping(word))
+        replace = function(get_mapping, filetype)
+            vim.api.nvim_command('normal! ciW' .. get_mapping(word, filetype))
         end,
     }
 end
@@ -35,12 +35,12 @@ M.__get_character_replacer = function()
     local character = line:sub(coords[2] + 1, coords[2] + 1)
 
     return {
-        can_handle = function()
-            return mapping.__has_mapping(character)
+        can_handle = function(filetype)
+            return mapping.__has_mapping(character, filetype)
         end,
 
-        replace = function(get_mapping)
-            vim.api.nvim_command('normal! r' .. get_mapping(character))
+        replace = function(get_mapping, filetype)
+            vim.api.nvim_command('normal! r' .. get_mapping(character, filetype))
         end,
     }
 end
@@ -56,12 +56,12 @@ M.__get_end_of_word_replacer = function()
     local end_of_word_under_cursor = line:sub(current_cursor_position[3], end_of_word_column + 1)
 
     return {
-        can_handle = function()
-            return mapping.__has_mapping(end_of_word_under_cursor)
+        can_handle = function(filetype)
+            return mapping.__has_mapping(end_of_word_under_cursor, filetype)
         end,
 
-        replace = function(get_mapping)
-            vim.api.nvim_command('normal! ce' .. get_mapping(end_of_word_under_cursor))
+        replace = function(get_mapping, filetype)
+            vim.api.nvim_command('normal! ce' .. get_mapping(end_of_word_under_cursor, filetype))
         end,
     }
 end
@@ -81,12 +81,12 @@ M.__visual_mode_replacer = function()
     end
 
     return {
-        can_handle = function()
-            return is_visual_mode() and mapping.__has_mapping(selected_text)
+        can_handle = function(filetype)
+            return is_visual_mode() and mapping.__has_mapping(selected_text, filetype)
         end,
 
-        replace = function(get_mapping)
-            vim.api.nvim_command('norm! c' .. get_mapping(selected_text))
+        replace = function(get_mapping, filetype)
+            vim.api.nvim_command('norm! c' .. get_mapping(selected_text, filetype))
         end,
     }
 end

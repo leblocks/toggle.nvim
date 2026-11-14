@@ -28,10 +28,11 @@ end
 M.__get_previous_mapping = function(word, filetype)
     -- cycle till the original word and get previous one
     local next_word = word
-    while next_word ~= get_map(filetype)[next_word] do
-        next_word = get_map(filetype)[next_word]
+    -- while next_word ~= M.__get_map(filetype)[next_word] do
+    while next_word ~= M.__get_mapping(next_word, filetype) do
+        next_word = M.__get_mapping(next_word, filetype)
 
-        if get_map(filetype)[next_word] == word then
+        if M.__get_mapping(next_word, filetype) == word then
             return next_word
         end
     end
