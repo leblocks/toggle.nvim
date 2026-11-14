@@ -4,7 +4,7 @@ local mapping_by_filetype = {}
 local M = {}
 
 local function get_map(filetype)
-    if not filetype or filetype == '' then
+    if filetype == nil then
         return mapping
     end
 
@@ -22,10 +22,10 @@ M.__reset = function()
 end
 
 M.__get_mapping = function(word, filetype)
-    return get_map(filetype)[word]
+    return get_map(filetype)[word] or get_map()[word]
 end
 
--- TODO
+-- TODO !!!
 M.__get_previous_mapping = function(word)
     -- cycle till the original word and get previous one
     local next_word = word
