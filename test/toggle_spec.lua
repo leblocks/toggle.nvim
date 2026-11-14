@@ -162,4 +162,21 @@ describe('toggle', function()
             assert(vim.fn.expand('<cword>') == 'void')
         end)
     end)
+
+    it('toggle - user defined mappings_by_filetype', function()
+        toggle.setup({
+            mappings_by_filetype = {
+                lua = {
+                    { 'custom_lua_1', 'custom_lua_2' },
+                },
+            },
+        })
+        open_file_at('test/test_files/test_1.lua', 1, 1, function()
+            vim.api.nvim_set_current_line('custom_lua_1')
+            toggle.toggle()
+            assert(vim.fn.expand('<cword>') == 'custom_lua_2')
+            toggle.toggle()
+            assert(vim.fn.expand('<cword>') == 'custom_lua_1')
+        end)
+    end)
 end)

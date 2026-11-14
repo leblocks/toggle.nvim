@@ -11,11 +11,10 @@ local register_table = function(mappings, filetype)
 end
 
 ---@class ToggleConfiguration
----@field defaults boolean Include built-in toggle pairs
----@field mappings table Additional toggle pairs
----@field mappings_by_filetype table Additional toggle pairs by filetype to overwrite AGENT TODO provide documentation
---- here and in vimdoc
----@field keep_cursor_position boolean Restore cursor position after toggling a word
+---@field defaults? boolean Include built-in toggle pairs
+---@field mappings? table<integer, string[]> Additional general toggle pairs
+---@field mappings_by_filetype? table<string, table<integer, string[]>> Additional toggle pairs grouped by filetype
+---@field keep_cursor_position? boolean Restore cursor position after toggling a word
 local config = {
     defaults = true,
     mappings = {},
@@ -40,11 +39,12 @@ function M.setup(opts)
     end
 
     if opts.mappings then
-        register_table(opts.mappings or {})
+        register_table(opts.mappings)
+    end
 
-        -- TODO test!
-        for ft, map in ipairs(opts.mappings_by_filetype or {}) do
-            register_table(ft, map)
+    if opts.mappings_by_filetype then
+        for ft, map in pairs(opts.mappings_by_filetype) do
+            register_table(map, ft)
         end
     end
 end
