@@ -2,14 +2,16 @@
 
 [![CI](https://img.shields.io/github/actions/workflow/status/leblocks/toggle.nvim/ci.yml?branch=master&label=CI&style=flat-square)](https://github.com/leblocks/toggle.nvim/actions)
 
-Instantly toggle words under your cursor to their semantic counterparts in a seamless, circular cycle. 
+Instantly toggle words under your cursor to their semantic counterparts in a seamless, circular cycle.
 
 Whether you're swapping `true` to `false`, cycling through `public` → `protected` → `private`, or switching operators like `==` to `!=`, **toggle.nvim** handles it smartly, predictably, and without losing your cursor position.
+
 
 ## ✨ Features
 
 - **Multi-Step Circular Cycling:** Go beyond simple booleans. Cycle through 3+ state chains (e.g., `info` → `warn` → `error` → `fatal`).
 - **Bi-directional:** Toggle forwards or backwards seamlessly.
+- **Filetype-Aware Mappings:** Define language-specific cycles (e.g., `pairs` ⇄ `ipairs` in Lua, `void` ⇄ `Task` in C#) that take precedence over general defaults.
 - **Smart Matching Engine:** Intelligently evaluates the word under the cursor. Supports Visual selections, `cWORD`, `cword`, end-of-word (`ce`), and single-character matches.
 - **Cursor Preservation:** Your cursor stays exactly where it belongs, maintaining its relative position during replacements.
 - **Zero Dependencies:** Extremely lightweight and fast.
@@ -74,13 +76,14 @@ You can pass a configuration table to `setup()`. Here are the available options 
 
 | Option | Type | Default | Description |
 | :--- | :---: | :---: | :--- |
-| `defaults` | `boolean` | `true` | If `true`, loads the plugin's built-in default mappings (e.g., true/false, on/off). |
+| `defaults` | `boolean` | `true` | If `true`, loads the plugin's built-in default mappings (e.g., true/false, on/off, language defaults). |
 | `keep_cursor_position`| `boolean` | `true` | Maintains the cursor's relative horizontal position after the replacement. |
 | `mappings` | `table` | `{}` | A list of tables containing your custom cyclic mappings. Merges with defaults. |
+| `mappings_by_filetype` | `table` | `{}` | Custom cyclic mappings organized by filetype (e.g. `{ lua = { ... } }`). Overrides general mappings. |
 
 ## 🛠️ Advanced Usage & Custom Mappings
 
-Adding your own custom vocabulary is trivial. Just provide arrays of strings in the `mappings` table. The plugin automatically wires them up as circular chains.
+Adding your own custom vocabulary is trivial. Just provide arrays of strings in the `mappings` or `mappings_by_filetype` tables. The plugin automatically wires them up as circular chains.
 
 ```lua
 require("toggle").setup({
@@ -89,16 +92,24 @@ require("toggle").setup({
     -- Custom boolean variants
     { "yes", "no", "maybe" },
     { "Yes", "No", "Maybe" },
-    
+
     -- Logging levels
     { "DEBUG", "INFO", "WARN", "ERROR", "FATAL" },
-    
+
     -- CSS properties
     { "flex-start", "center", "flex-end", "space-between", "space-around" },
-    
+
     -- Framework specific (e.g., React states)
     { "useState", "useEffect", "useContext", "useReducer" },
-  }
+  },
+  mappings_by_filetype = {
+    lua = {
+      { "pairs", "ipairs" },
+    },
+    cs = {
+      { "Task", "ValueTask" },
+    },
+  },
 })
 ```
 
@@ -116,4 +127,4 @@ Mappings are circular: for a group like `{ 'public', 'protected', 'private' }`, 
 
 ## Default mappings
 
-See [lua/toggle/defaults.lua](lua/toggle/defaults.lua) for the full list of built-in toggle pairs.
+See [lua/toggle/defaults/](lua/toggle/defaults/) for the full list of built-in toggle pairs, including general pairs and language-specific sets (Lua, C#, PowerShell, Python, and JavaScript).

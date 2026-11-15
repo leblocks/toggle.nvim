@@ -80,6 +80,26 @@ mappings ~
       }
 <
 
+                                       *toggle-opts-mappings-by-filetype*
+mappings_by_filetype ~
+    Type: `table` (table of lists of lists)
+    Default: `{}`
+
+    Additional toggle pairs registered for specific filetypes. Keys are
+    filetype names (such as `'lua'`, `'cs'`, `'ps1'`), and values are lists
+    of circular toggle groups. Filetype-specific mappings take priority over
+    general mappings when active. >lua
+
+      mappings_by_filetype = {
+        lua = {
+          { 'pairs', 'ipairs' },
+        },
+        cs = {
+          { 'public', 'protected', 'internal', 'private' },
+        },
+      }
+<
+
 ==============================================================================
 4. USAGE                                                      *toggle-usage*
 
@@ -128,9 +148,9 @@ toggle.toggle([{toggle_backwards}])
 ==============================================================================
 6. DEFAULT MAPPINGS                                       *toggle-defaults*
 
-The full list of built-in toggle pairs can be found in the source file:
+The full list of built-in toggle pairs can be found in the directory:
 
-  `lua/toggle/defaults.lua`
+  `lua/toggle/defaults/`
 
 ==============================================================================
  vim:tw=78:ts=8:ft=help:norl:

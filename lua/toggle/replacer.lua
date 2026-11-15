@@ -1,50 +1,65 @@
 local mapping = require('toggle.mapping')
 
--- TODO provide luadocs for replacers
+---@class Replacer
+---@field can_handle fun(filetype?: string): boolean Evaluates whether replacer can handle cursor text
+---@field replace fun(get_mapping: fun(word: string, filetype?: string): string, filetype?: string) Replaces text
+
 local M = {}
 
+--- Creates a replacer for the standard alphanumeric word under the cursor (`<cword>`).
+--- Replaces matched text via `ciw`.
+---@return Replacer
 M.__get_cword_replacer = function()
     local word = vim.fn.expand('<cword>')
     return {
-        can_handle = function()
-            return mapping.__has_mapping(word)
+        can_handle = function(filetype)
+            return mapping.__has_mapping(word, filetype)
         end,
 
-        replace = function(get_mapping)
-            vim.api.nvim_command('normal! ciw' .. get_mapping(word))
+        replace = function(get_mapping, filetype)
+            vim.api.nvim_command('normal! ciw' .. get_mapping(word, filetype))
         end,
     }
 end
 
+--- Creates a replacer for the contiguous non-blank string under the cursor (`<cWORD>`).
+--- Replaces matched text via `ciW`.
+---@return Replacer
 M.__get_cWORD_replacer = function()
     local word = vim.fn.expand('<cWORD>')
     return {
-        can_handle = function()
-            return mapping.__has_mapping(word)
+        can_handle = function(filetype)
+            return mapping.__has_mapping(word, filetype)
         end,
 
-        replace = function(get_mapping)
-            vim.api.nvim_command('normal! ciW' .. get_mapping(word))
+        replace = function(get_mapping, filetype)
+            vim.api.nvim_command('normal! ciW' .. get_mapping(word, filetype))
         end,
     }
 end
 
+--- Creates a replacer for the single character under the cursor.
+--- Replaces matched text via `r`.
+---@return Replacer
 M.__get_character_replacer = function()
     local coords = vim.api.nvim_win_get_cursor(0)
     local line = vim.api.nvim_get_current_line()
     local character = line:sub(coords[2] + 1, coords[2] + 1)
 
     return {
-        can_handle = function()
-            return mapping.__has_mapping(character)
+        can_handle = function(filetype)
+            return mapping.__has_mapping(character, filetype)
         end,
 
-        replace = function(get_mapping)
-            vim.api.nvim_command('normal! r' .. get_mapping(character))
+        replace = function(get_mapping, filetype)
+            vim.api.nvim_command('normal! r' .. get_mapping(character, filetype))
         end,
     }
 end
 
+--- Creates a replacer for the sub-word extending from the cursor to the end of the word.
+--- Replaces matched text via `ce`.
+---@return Replacer
 M.__get_end_of_word_replacer = function()
     local current_cursor_position = vim.fn.getcurpos()
     vim.api.nvim_command('normal! e') -- jump to the end of word
@@ -56,16 +71,19 @@ M.__get_end_of_word_replacer = function()
     local end_of_word_under_cursor = line:sub(current_cursor_position[3], end_of_word_column + 1)
 
     return {
-        can_handle = function()
-            return mapping.__has_mapping(end_of_word_under_cursor)
+        can_handle = function(filetype)
+            return mapping.__has_mapping(end_of_word_under_cursor, filetype)
         end,
 
-        replace = function(get_mapping)
-            vim.api.nvim_command('normal! ce' .. get_mapping(end_of_word_under_cursor))
+        replace = function(get_mapping, filetype)
+            vim.api.nvim_command('normal! ce' .. get_mapping(end_of_word_under_cursor, filetype))
         end,
     }
 end
 
+--- Creates a replacer for the actively selected visual mode region.
+--- Replaces matched text via `c`.
+---@return Replacer
 M.__visual_mode_replacer = function()
     local function is_visual_mode()
         local mode = vim.api.nvim_get_mode().mode
@@ -81,12 +99,12 @@ M.__visual_mode_replacer = function()
     end
 
     return {
-        can_handle = function()
-            return is_visual_mode() and mapping.__has_mapping(selected_text)
+        can_handle = function(filetype)
+            return is_visual_mode() and mapping.__has_mapping(selected_text, filetype)
         end,
 
-        replace = function(get_mapping)
-            vim.api.nvim_command('norm! c' .. get_mapping(selected_text))
+        replace = function(get_mapping, filetype)
+            vim.api.nvim_command('norm! c' .. get_mapping(selected_text, filetype))
         end,
     }
 end

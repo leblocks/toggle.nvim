@@ -1,0 +1,17 @@
+return {
+    { 'any', 'all' },
+    { 'dumps', 'loads' },
+    { 'dump', 'load' },
+    { 'startswith', 'endswith' },
+    { 'lstrip', 'rstrip', 'strip' },
+    { 'append', 'extend' },
+    { 'keys', 'values', 'items' },
+    { 'args', 'kwargs' },
+    { 'classmethod', 'staticmethod' },
+    { 'assertEqual', 'assertNotEqual' },
+    { 'assertTrue', 'assertFalse' },
+    { 'assertIs', 'assertIsNot' },
+    { 'assertIsNone', 'assertIsNotNone' },
+    { 'assertIn', 'assertNotIn' },
+    { 'setUp', 'tearDown' },
+}
